@@ -41,7 +41,7 @@ cat("Ciudades en la población: "); print(table(poblacion$ciudad))
 #         Pista: head(poblacion, 20) — igual que la demo de clase.
 #         Después de correrlo, mira la composición por ciudad que imprime el
 #         reporte: ¿es un corte al azar? ¿alguna ciudad falta por completo?
-muestra_conv <- NULL
+muestra_conv <- head(poblacion, 20)
 
 # ---------------------------------------------------------------------------
 # 3. Muestra aleatoria simple: el sorteo de 20
@@ -52,7 +52,8 @@ muestra_conv <- NULL
 # TODO 3: repite el sorteo con las semillas 2 a 5 y anota las 5 medias en el
 #         informe: la variabilidad de la estimación es parte de la lección.
 #         Pista: for (semilla in 1:5) { set.seed(semilla); ... }
-muestra_aas <- NULL
+set.seed(1)
+muestra_aas <- poblacion[sample(nrow(poblacion), 20), ]
 
 # ---------------------------------------------------------------------------
 # 4. Muestra estratificada: 5 % dentro de cada ciudad
@@ -62,7 +63,9 @@ muestra_aas <- NULL
 #         Cuenca (20 en total).
 #         Pista: library(dplyr); poblacion |> group_by(ciudad) |> slice_sample(prop = 0.05)
 #         ¿Qué garantiza este diseño que el sorteo simple no garantiza?
-muestra_est <- NULL
+library(dplyr)
+set.seed(1)
+muestra_est <- poblacion |> group_by(ciudad) |> slice_sample(prop = 0.05)
 
 # ---------------------------------------------------------------------------
 # 5. Comparación final
@@ -81,14 +84,4 @@ if (!is.null(muestra_conv) && !is.null(muestra_aas) && !is.null(muestra_est)) {
   )
   cat(sprintf("Parámetro poblacional: %.2f USD\n", parametro))
   print(resumen, row.names = FALSE)
-  cat("Con estas salidas responde en informe.md las preguntas P2 a P5:\n")
-  cat("  P2: ¿cuál diseño quedó más cerca del parámetro y por qué un solo\n")
-  cat("      número no basta para declarar un ganador?\n")
-  cat("  P3: ¿qué defecto tiene la muestra por conveniencia y cómo lo delata\n")
-  cat("      su composición por ciudad? ¿Se corrige con más filas?\n")
-  cat("  P4: ¿qué implica la variabilidad entre semillas para una decisión\n")
-  cat("      tomada con un solo estudio?\n")
-  cat("  P5: ¿cuándo usarías cada diseño? (piloto · subgrupos · conclusión)\n")
-} else {
-  cat("Completa los TODO 1 a 4 para ver la tabla comparativa.\n")
 }

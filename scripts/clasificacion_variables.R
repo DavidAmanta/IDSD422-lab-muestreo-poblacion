@@ -33,9 +33,10 @@ str(clientes)
 # TODO 2: completa el bucle para imprimir, por columna, cuántos valores únicos
 #         hay y cuáles son. Pista: for (columna in names(clientes)) { ... } con
 #         unique() y length(). ¿Cuántas categorías tiene genero?
-# for (columna in names(clientes)) {
-#   ...
-# }
+for (columna in names(clientes)) {
+   cat(sprintf("%s: %d valores únicos\n", columna, length(unique(clientes[[columna]]))))
+   cat(sprintf("  Valores: %s\n", paste(unique(clientes[[columna]]), collapse = ", ")))
+}
 
 # ---------------------------------------------------------------------------
 # 4. Declarar el orden de las variables ordinales
@@ -50,23 +51,31 @@ str(clientes)
 #         Prueba extra: ¿qué pasa si en levels escribes "Postgrado" (con t) para
 #         nivel_educacion? Cuenta los faltantes con sum(is.na(...)) — la trampa
 #         del typo es silenciosa.
-
+clientes$nivel_educacion <- factor(clientes$nivel_educacion,
+                                   levels = c("Primaria", "Secundaria", "Universidad", "Posgrado"),
+                                   ordered = TRUE)
+cat(sprintf("Nivel de educación mínimo: %s\n", min(clientes$nivel_educacion)))
+clientes$satisfaccion <- factor(clientes$satisfaccion,
+                                levels = c(1, 2, 3, 4, 5),
+                                ordered = TRUE)
+cat(sprintf("faltantes nivel_educacion: %d\n", sum(is.na(clientes$nivel_educacion))))
+cat(sprintf("faltantes satisfaccion: %d\n", sum(is.na(clientes$satisfaccion))))
 # ---------------------------------------------------------------------------
 # 5. Resumen de la clasificación (para el informe)
 # ---------------------------------------------------------------------------
 # TODO 5: completa el resumen con el tipo de cada variable (el criterio que
 #         justifica cada clasificación va en el informe).
 clasificacion <- c(
-  cliente_id         = "…",
-  edad               = "…",
-  numero_hijos       = "…",
-  genero             = "…",
-  nivel_educacion    = "…",
-  ciudad             = "…",
-  ingresos_mensuales = "…",
-  satisfaccion       = "…"
+  cliente_id         = "categórica nominal",
+  edad               = "numérica discreta",
+  numero_hijos       = "numérica discreta",
+  genero             = "categórica binaria",
+  nivel_educacion    = "categórica ordinal",
+  ciudad             = "categórica nominal",
+  ingresos_mensuales = "numérica continua",
+  satisfaccion       = "categórica ordinal"
 )
-cat("\nResumen de la clasificación (para el informe):\n")
+cat("\nResumen de la clasificación:\n")
 for (variable in names(clasificacion)) {
   cat(sprintf("  %-18s %s\n", variable, clasificacion[[variable]]))
 }

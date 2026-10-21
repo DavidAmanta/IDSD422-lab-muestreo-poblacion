@@ -38,8 +38,10 @@ print()
 # TODO 2: completa el bucle para imprimir, por columna, cuántos valores únicos
 #         hay y cuáles son. Pista: for columna in clientes.columns: ...  con
 #         clientes[columna].unique() y len(). ¿Cuántas categorías tiene genero?
-# for columna in clientes.columns:
-#     ...
+for columna in clientes.columns:
+    print(f"{columna}: {len(clientes[columna].unique())} valores únicos")
+    print(f"  Valores: {clientes[columna].unique()}")
+
 print()
 
 # ---------------------------------------------------------------------------
@@ -55,23 +57,30 @@ print()
 #         Prueba extra: ¿qué pasa si en la lista de categorías escribes
 #         "Postgrado" (con t) para nivel_educacion? Cuenta los faltantes con
 #         .isna().sum() — la trampa del typo es silenciosa.
+clientes["nivel_educacion"] = clientes["nivel_educacion"].astype(pd.CategoricalDtype(
+    categories=["Primaria", "Secundaria", "Universidad", "Posgrado"], ordered=True))
+print(f"Nivel de educación mínimo: {clientes['nivel_educacion'].min()}")
+
+clientes["satisfaccion"] = clientes["satisfaccion"].astype(pd.CategoricalDtype(
+    categories=[1, 2, 3, 4, 5], ordered=True))
+print(f"faltantes nivel_educacion: {clientes['nivel_educacion'].isna().sum()}")
 print()
 
 # ---------------------------------------------------------------------------
-# 5. Resumen de la clasificación (para el informe)
+# 5. Resumen de la clasificación 
 # ---------------------------------------------------------------------------
 # TODO 5: completa el resumen con el tipo de cada variable (el criterio que
 #         justifica cada clasificación va en el informe).
 clasificacion = {
-    "cliente_id": "…",
-    "edad": "…",
-    "numero_hijos": "…",
-    "genero": "…",
-    "nivel_educacion": "…",
-    "ciudad": "…",
-    "ingresos_mensuales": "…",
-    "satisfaccion": "…",
+    "cliente_id": "categórica nominal",
+    "edad": "numérica discreta",
+    "numero_hijos": "numérica discreta",
+    "genero": "categórica binaria",
+    "nivel_educacion": "categórica ordinal",
+    "ciudad": "categórica nominal",
+    "ingresos_mensuales": "numérica continua",
+    "satisfaccion": "categórica ordinal",
 }
-print("Resumen de la clasificación (para el informe):")
+print("Resumen de la clasificación:")
 for variable, tipo in clasificacion.items():
     print(f"  {variable:20s} {tipo}")
